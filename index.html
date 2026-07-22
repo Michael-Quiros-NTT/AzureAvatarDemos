@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avatar Chat - LEEROY</title>
+    <!-- <link rel="stylesheet" href="css/styles.css"> -->
+    <link rel="stylesheet" href="css/chat-modern.css">
+    <link rel="stylesheet" href="css/nueco-stilo.css">
+    <script src="https://aka.ms/csspeech/jsbrowserpackageraw"></script>
+    <script src="js/chat.js"></script>
+</head>
+<body>
+    <!-- ===== VERIFICACIÓN DE CONTRATOS DOM =====
+         Todos estos IDs deben estar presentes y accesibles para que el JS de chat.js funcione.
+         ===== END VERIFICACIÓN ===== -->
+
+    <div class="main-panel">
+        <div class="panel-content">
+            <!-- Logo -->
+            <div class="brand-logo">NTTDATA avatar</div>
+
+            <!-- Left Navigation Menu -->
+            <nav class="left-menu">
+                <button id="togglePreviewMode" onclick="window.togglePreviewMode()" class="menu-item" type="button">PREVIEW</button>
+                <button class="menu-item" id="stopSpeaking" onclick="window.stopSpeaking()" type="button" disabled>INTERUMPIR</button>
+                <button class="menu-item" id="leftMenuClearChat" onclick="window.clearChatHistory()" type="button">LIMPIAR</button>
+                <button class="menu-item" id="leftMenuStopSession" onclick="window.stopSession()" type="button">DETENER</button>
+                <button id="stopSession" type="button" hidden disabled aria-hidden="true" tabindex="-1"></button>
+            </nav>
+
+            <!-- TOP STATUS BAR -->
+            <div class="top-status-bar">
+                <div class="status-bar">
+                    <span class="status-dot" id="sessionStatus"></span>
+                    <span class="status-label" id="sessionStatusLabel">Disconnected</span>
+                </div>
+            </div>
+
+            <!-- Top Right - Join Button -->
+            <button id="startSession" class="join-button" onclick="window.startSession()">
+                <span class="join-label">JOIN</span>
+                <div class="join-icon">+</div>
+            </button>
+
+            <!-- Bottom Center - Microphone Action -->
+            <button id="microphone" class="floating-mic-button" onclick="window.microphone()" type="button" disabled>
+                MIC
+            </button>
+
+            <!-- Center Visual - Avatar Area with Video -->
+            <div class="avatar-container">
+                <!-- <div class="avatar-backdrop"></div> -->
+                
+                <!-- VIDEO CONTAINER — Critical contract with JS -->
+                <div id="videoContainer" style="position: relative;max-width: 33%;height: 70vh;margin: auto auto;border-radius: 12px;overflow: hidden;background: #ffffff;display: flex;justify-content: center;top: 21vh;">
+                    
+                    <!-- OVERLAY AREA — Critical contract -->
+                    <div id="overlayArea" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10;">
+                        <!-- CHAT HISTORY — Critical contract, contentEditable -->
+                        <!-- <div id="chatHistory" style="border: none; resize: none; background-color: transparent; overflow: hidden; display: none;" contentEditable="true" hidden></div> -->
+                    </div>
+
+                    <!-- SUBTITLES — Critical contract -->
+                    <div id="subtitles" style="width: 100%; text-align: center; color: white; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000; position: absolute; bottom: 5%; z-index: 999;" hidden></div>
+
+                    <!-- LOCAL VIDEO FALLBACK — Critical contract -->
+                    <div id="localVideo" hidden>
+                        <video src="assets/video/lisa-casual-sitting-idle.mp4" autoplay loop muted></video>
+                    </div>
+
+                    <!-- REMOTE VIDEO HOST — Critical contract, where JS injects video/audio -->
+                    <div id="remoteVideo" style="margin: 0 auto; width: 100%; min-height: 350px; display: flex; align-items: center; justify-content: center; background: transparent;">
+                        <!-- Avatar image will be injected here in preview mode -->
+                        <img src="avatar-preview.png" alt="Avatar" style="max-width: 100%; max-height: 350px; display: none;" id="previewAvatarImage">
+                    </div>
+
+                    <!-- PREVIEW BANNER — Critical contract -->
+                    <div id="previewBanner" class="preview-banner" hidden style="position: absolute; top: 10px; left: 50%; transform: translateX(-50%); background-color: rgba(245, 158, 11, 0.15); border: 1px solid #f59e0b; border-radius: 9999px; color: #f59e0b; font-size: 0.75rem; font-weight: 600; padding: 6px 16px; z-index: 1000; white-space: nowrap;">⚠️ PREVIEW MODE</div>
+                </div>
+            </div>
+
+            <!-- CONTROL BUTTONS BAR -->
+            <!-- <div class="controls-bar" style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: end; margin: 20px 0; padding: 0 20px;">
+                <button id="startSession" onclick="window.startSession()" class="control-btn primary">Start</button>
+                <button id="microphone" onclick="window.microphone()" class="control-btn" disabled>Mic</button>
+                <button id="stopSpeaking" onclick="window.stopSpeaking()" class="control-btn" disabled>Stop</button>
+                <button id="clearChatHistory" onclick="window.clearChatHistory()" class="control-btn">Clear</button>
+                <button id="stopSession" onclick="window.stopSession()" class="control-btn danger" disabled>End</button>
+                <button id="togglePreviewMode" onclick="window.togglePreviewMode()" class="control-btn preview">Preview</button>
+            </div> -->
+
+            <!-- Bottom Left - Chat Block -->
+            <div class="chat-block">
+                <div class="chat-header" hidden>
+                    <h2 class="chat-title">Chat</h2>
+                    <div id="sessionStatusLabel2" style="font-size: 0.75rem; color: #a3a3a3;">Ready to chat</div>
+                </div>
+
+                <!-- CHAT HISTORY — Real avatar transcript area -->
+                <div id="chatHistory" contentEditable="true" >
+                </div>
+                
+                <!-- CHAT INPUT AREA — Real avatar chat uses #showTypeMessage + #userMessageBox -->
+                <div class="chat-input-wrapper">
+                    <div id="showTypeMessageCheckbox" hidden style="display: none; align-items: center; gap: 8px; margin-bottom: 10px; color: #a3a3a3; font-size: 0.75rem;">
+                        <input type="checkbox" id="showTypeMessage" onchange="window.updateTypeMessageBox()">
+                        <label for="showTypeMessage">Type message</label>
+                    </div>
+                    <div id="userMessageBox" hidden contentEditable="true"></div>
+                </div>
+
+                <!-- UPLOAD ICON — Critical contract -->
+                <img id="uploadImgIcon" src="assets/attachment.jpg" alt="Attach" style="cursor: pointer; width: 20px; height: 20px; display: none; margin-top: 8px;">
+            </div>
+
+            <!-- Bottom Right - Action Buttons -->
+            <div class="action-buttons">
+                <button class="profile-button" id="configToggle" onclick="window.toggleConfiguration ? window.toggleConfiguration() : toggleConfigurationPanel()">
+                    <span class="profile-label">⚙️ CONFIG</span>
+                    <div class="profile-icon">→</div>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== CONFIGURATION PANEL — HIDDEN BY DEFAULT (ya están seteados en código) ===== -->
+    <div id="configuration" style="display: none; position: fixed; bottom: 20px; right: 20px; background: #171717; border: 1px solid #404040; border-radius: 12px; padding: 20px; max-width: 400px; max-height: 60vh; overflow-y: auto; z-index: 1001; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+        <!-- ⚠️ API KEYS DE PRUEBA — Solo para entorno local de desarrollo
+             NO commitear estas claves a un repositorio público.
+             Reemplazar con variables de entorno o un backend seguro antes de producción. -->
+
+        <h3 style="color: #e5e5e5; margin-bottom: 15px;">Configuration</h3>
+
+        <!-- VISIBLE FIELDS -->
+        <div style="margin-bottom: 15px;" hidden>
+            <label style="color: #a3a3a3; font-size: 0.85rem;">Region:</label>
+            <select id="region" style="width: 100%; padding: 6px; background: #0a0a0a; border: 1px solid #404040; color: #e5e5e5; border-radius: 6px;">
+                <option value="westus2">West US 2</option>
+                <option value="westeurope">West Europe</option>
+                <option value="southeastasia">Southeast Asia</option>
+                <option value="southcentralus">South Central US</option>
+                <option value="northeurope">North Europe</option>
+                <option value="swedencentral">Sweden Central</option>
+                <option value="eastus2" selected>East US 2</option>
+                <option value="eastus">East US</option>
+            </select>
+        </div>
+
+        <div style="margin-bottom: 15px;" hidden>
+            <label style="color: #a3a3a3; font-size: 0.85rem;">API Key:</label>
+            <input id="APIKey" type="password" style="width: 100%; padding: 6px; background: #0a0a0a; border: 1px solid #404040; color: #e5e5e5; border-radius: 6px; font-size: 0.75rem;" value=""/>
+        </div>
+
+        <div style="margin-bottom: 15px;" hidden>
+            <label style="color: #a3a3a3; font-size: 0.85rem;">OpenAI Endpoint:</label>
+            <input id="azureOpenAIEndpoint" type="text" style="width: 100%; padding: 6px; background: #0a0a0a; border: 1px solid #404040; color: #e5e5e5; border-radius: 6px; font-size: 0.75rem;" value="https://openaitestavatarmichael.openai.azure.com/"/>
+        </div>
+
+        <div style="margin-bottom: 15px;" hidden>
+            <label style="color: #a3a3a3; font-size: 0.85rem;">OpenAI API Key:</label>
+            <input id="azureOpenAIApiKey" type="password" style="width: 100%; padding: 6px; background: #0a0a0a; border: 1px solid #404040; color: #e5e5e5; border-radius: 6px; font-size: 0.75rem;" value=""/>
+        </div>
+
+        <div style="margin-bottom: 15px;">
+            <label style="color: #a3a3a3; font-size: 0.85rem;">Deployment Name:</label>
+            <input id="azureOpenAIDeploymentName" type="text" style="width: 100%; padding: 6px; background: #0a0a0a; border: 1px solid #404040; color: #e5e5e5; border-radius: 6px;" value="gpt-5-mini"/>
+        </div>
+
+        <div style="margin-bottom: 15px;">
+            <label style="color: #a3a3a3; font-size: 0.85rem;">Avatar:</label>
+            <select id="talkingAvatarCharacter" style="width: 100%; padding: 6px; background: #0a0a0a; border: 1px solid #404040; color: #e5e5e5; border-radius: 6px;" onchange="window.syncAvatarStyles && window.syncAvatarStyles()">
+                <option value="lisa" selected>lisa</option>
+                <option value="meg">meg</option>
+                <option value="harry">harry</option>
+                <option value="jeff">jeff</option>
+            </select>
+        </div>
+
+        <div style="margin-bottom: 15px;">
+            <label style="color: #a3a3a3; font-size: 0.85rem;">Avatar Style:</label>
+            <select id="talkingAvatarStyle" style="width: 100%; padding: 6px; background: #0a0a0a; border: 1px solid #404040; color: #e5e5e5; border-radius: 6px;">
+                <option value="casual-standing">casual-standing</option>
+                <option value="casual-sitting" selected>casual-sitting</option>
+                <option value="graceful-standing">graceful-standing</option>
+                <option value="graceful-sitting">graceful-sitting</option>
+                <option value="technical-standing">technical-standing</option>
+                <option value="technical-sitting">technical-sitting</option>
+            </select>
+        </div>
+
+        <!-- HIDDEN FIELDS — Requeridos por chat.js pero no visibles -->
+        <input id="enablePrivateEndpoint" type="checkbox" hidden/>
+        <input id="privateEndpoint" type="text" hidden value=""/>
+        <label for="prompt" hidden>System Prompt:</label>
+        <textarea id="prompt" hidden>You are an AI assistant that helps people find information.</textarea>
+        <input id="enableOyd" type="checkbox" hidden/>
+        <input id="azureCogSearchEndpoint" type="text" hidden value=""/>
+        <input id="azureCogSearchApiKey" type="password" hidden value=""/>
+        <input id="azureCogSearchIndexName" type="text" hidden value=""/>
+        <input id="sttLocales" type="text" hidden value="en-US,de-DE,es-ES,fr-FR,it-IT,ja-JP,ko-KR,zh-CN"/>
+        <input id="ttsVoice" type="text" hidden value="en-US-AvaMultilingualNeural"/>
+        <input id="customVoiceEndpointId" type="text" hidden value=""/>
+        <input id="continuousConversation" type="checkbox" hidden/>
+        <input id="photoAvatar" type="checkbox" hidden/>
+        <input id="customizedAvatar" type="checkbox" hidden/>
+        <input id="useBuiltInVoice" type="checkbox" hidden/>
+        <input id="autoReconnectAvatar" type="checkbox" hidden/>
+        <input id="useLocalVideoForIdle" type="checkbox" hidden/>
+        <input id="showSubtitles" type="checkbox" hidden/>
+
+        <button onclick="document.getElementById('configuration').style.display='none';" style="width: 100%; padding: 8px; background: #3b82f6; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">Close</button>
+    </div>
+
+    <script>
+        // Toggle configuration panel visibility
+        function toggleConfigurationPanel() {
+            const config = document.getElementById('configuration');
+            config.style.display = config.style.display === 'none' ? 'block' : 'none';
+        }
+        window.toggleConfiguration = toggleConfigurationPanel;
+
+        const avatarStylesByCharacter = {
+            lisa: ['casual-standing', 'casual-sitting', 'graceful-standing', 'graceful-sitting', 'technical-standing', 'technical-sitting'],
+            meg: ['business', 'casual', 'formal'],
+            harry: ['business', 'casual', 'youthful'],
+            jeff: ['business', 'formal']
+        };
+
+        function syncAvatarStyles() {
+            const avatarSelect = document.getElementById('talkingAvatarCharacter');
+            const styleSelect = document.getElementById('talkingAvatarStyle');
+            if (!avatarSelect || !styleSelect) {
+                return;
+            }
+
+            const selectedAvatar = avatarSelect.value;
+            const allowedStyles = avatarStylesByCharacter[selectedAvatar] || [];
+            const previousStyle = styleSelect.value;
+
+            styleSelect.innerHTML = '';
+            allowedStyles.forEach((style) => {
+                const option = document.createElement('option');
+                option.value = style;
+                option.textContent = style;
+                styleSelect.appendChild(option);
+            });
+
+            if (allowedStyles.includes(previousStyle)) {
+                styleSelect.value = previousStyle;
+            } else if (allowedStyles.length > 0) {
+                styleSelect.value = allowedStyles[0];
+            }
+        }
+
+        window.syncAvatarStyles = syncAvatarStyles;
+        window.syncAvatarStyles();
+
+        // Override togglePreviewMode to show the preview avatar image
+        const originalActivatePreviewMode = window.activatePreviewMode;
+        window.activatePreviewMode = function() {
+            if (originalActivatePreviewMode) {
+                originalActivatePreviewMode();
+            }
+            // Show the preview avatar image
+            const previewImg = document.getElementById('previewAvatarImage');
+            if (previewImg) {
+                previewImg.style.display = 'block';
+            }
+        };
+
+        const originalDeactivatePreviewMode = window.deactivatePreviewMode;
+        window.deactivatePreviewMode = function() {
+            if (originalDeactivatePreviewMode) {
+                originalDeactivatePreviewMode();
+            }
+            // Hide the preview avatar image
+            const previewImg = document.getElementById('previewAvatarImage');
+            if (previewImg) {
+                previewImg.style.display = 'none';
+            }
+        };
+    </script>
+</body>
+</html>
