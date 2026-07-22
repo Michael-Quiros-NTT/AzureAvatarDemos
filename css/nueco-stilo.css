@@ -5,6 +5,16 @@
 }
 
 
+#particles-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+}
+
 /* Reset & Base Styles */
 * {
     margin: 0;
@@ -138,9 +148,10 @@ button.menu-item {
 /* Join Button - Bottom Right */
 .join-button {
     position: absolute;
-    top: auto;
-    bottom: 5vh;
-    right: 6vw;
+    bottom: 2vh;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
     width: auto;
     padding: 10px 20px;
     height: 40px;
@@ -152,10 +163,20 @@ button.menu-item {
     border: 1px solid var(--color-text-primary);
     border-radius: 0;
     cursor: pointer;
-    z-index: 10;
+    z-index: 12;
     transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     user-select: none;
     font-family: inherit;
+}
+
+/* Before session: MIC hidden */
+body:not(.session-started) .floating-mic-button {
+    display: none;
+}
+
+/* After session starts: JOIN hidden */
+body.session-started .join-button {
+    display: none;
 }
 
 .join-button:hover {

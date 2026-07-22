@@ -748,6 +748,7 @@ window.onload = () => {
 
 window.startSession = () => {
     lastInteractionTime = new Date()
+    document.body.classList.add('session-started')
     if (document.getElementById('useLocalVideoForIdle').checked) {
         document.getElementById('startSession').disabled = true
         document.getElementById('configuration').hidden = true
@@ -766,6 +767,7 @@ window.startSession = () => {
 
 window.stopSession = () => {
     lastInteractionTime = new Date()
+    document.body.classList.remove('session-started')
     document.getElementById('startSession').disabled = false
     document.getElementById('microphone').disabled = true
     document.getElementById('stopSession').disabled = true
