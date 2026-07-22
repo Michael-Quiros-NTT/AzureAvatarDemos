@@ -213,6 +213,16 @@
     </div>
 
     <script>
+        fetch('/api/config')
+            .then(r => r.json())
+            .then(cfg => {
+                document.getElementById('APIKey').value = cfg.speechKey;
+                document.getElementById('region').value = cfg.speechRegion || 'eastus2';
+                document.getElementById('azureOpenAIEndpoint').value = cfg.openAIEndpoint;
+                document.getElementById('azureOpenAIApiKey').value = cfg.openAIKey;
+                document.getElementById('azureOpenAIDeploymentName').value = cfg.openAIDeployment;
+            });
+
         // Toggle configuration panel visibility
         function toggleConfigurationPanel() {
             const config = document.getElementById('configuration');
