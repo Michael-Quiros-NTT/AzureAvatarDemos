@@ -361,11 +361,11 @@ body.session-started .join-button {
     height: 50vh;
     display: flex;
     flex-direction: column;
-    background: var(--background-color);
+    background: #ffffff00;
     border-radius: 12px;
     gap: 10px;
     z-index: 10;
-    backdrop-filter: blur(4px);
+    /* backdrop-filter: blur(4px); */
     justify-content: end;
 }
 
