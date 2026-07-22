@@ -792,12 +792,12 @@ window.clearChatHistory = () => {
 
 window.microphone = () => {
     lastInteractionTime = new Date()
-    if (document.getElementById('microphone').innerHTML === 'Stop Microphone') {
+    if (document.getElementById('microphone').classList.contains('mic-active')) {
         // Stop microphone
         document.getElementById('microphone').disabled = true
         speechRecognizer.stopContinuousRecognitionAsync(
             () => {
-                document.getElementById('microphone').innerHTML = 'Start Microphone'
+                document.getElementById('microphone').classList.remove('mic-active')
                 document.getElementById('microphone').disabled = false
             }, (err) => {
                 console.log("Failed to stop continuous recognition:", err)
@@ -832,7 +832,7 @@ window.microphone = () => {
                 document.getElementById('microphone').disabled = true
                 speechRecognizer.stopContinuousRecognitionAsync(
                     () => {
-                        document.getElementById('microphone').innerHTML = 'Start Microphone'
+                        document.getElementById('microphone').classList.remove('mic-active')
                         document.getElementById('microphone').disabled = false
                     }, (err) => {
                         console.log("Failed to stop continuous recognition:", err)
@@ -846,7 +846,7 @@ window.microphone = () => {
 
     speechRecognizer.startContinuousRecognitionAsync(
         () => {
-            document.getElementById('microphone').innerHTML = 'Stop Microphone'
+            document.getElementById('microphone').classList.add('mic-active')
             document.getElementById('microphone').disabled = false
         }, (err) => {
             console.log("Failed to start continuous recognition:", err)

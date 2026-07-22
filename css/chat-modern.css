@@ -117,10 +117,8 @@
 
 #microphone {
   border-color: #22c55e;
-  color: #22c55e;
 }
 
 #microphone:hover:not([disabled]) {
   background-color: #22c55e;
-  color: #ffffff;
 }
