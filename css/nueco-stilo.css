@@ -204,11 +204,11 @@ body.session-started .join-button {
     width: 24px;
     height: 24px;
     border-radius: 50%;
-    background-color: var(--color-dark-circle);
+    background-color: #8ecfdd;
     display: flex;
     justify-content: center;
     align-items: center;
-    color: white;
+    color: var(--color-text-primary);
     font-size: 13px;
     font-weight: 400;
     flex-shrink: 0;
@@ -358,7 +358,7 @@ body.session-started .join-button {
     bottom: 5vh;
     left: 8vw;
     max-width: 400px;
-    height: 50vh;
+    height: 70vh;
     display: flex;
     flex-direction: column;
     background: #ffffff00;
@@ -385,7 +385,7 @@ body.session-started .join-button {
 
 #chatHistory {
     min-height: 220px;
-    max-height: 260px;
+    max-height: 100%;
     overflow-y: auto;
     /* border: 1px solid #404040; */
     border-radius: 12px;
@@ -666,5 +666,248 @@ body.session-started .join-button {
     .panel-content {
         box-shadow: none;
     }
+}
+.top-status-bar{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Configuration Panel */
+#configuration {
+    display: grid;
+    position: fixed;
+    top: 4vh;
+    right: 20px;
+    z-index: 1001;
+    width: 260px;
+    padding: 8px 0;
+}
+
+.config-field {
+    margin-bottom: 10px;
+    display: grid;
+    grid-template-columns: 50% 50%;
+    align-items: center;
+    justify-items: end;
+}
+
+.config-field label {
+    display: block;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+    /* color: var(--color-text-secondary); */
+    color: #8ecfdd;
+    margin-bottom: 5px;
+    text-align: right;
+}
+
+.config-field select {
+    width: 100%;
+    padding: 5px 8px;
+    background: transparent;
+    border: 1px solid var(--color-line-light);
+    border-radius: 4px;
+    color: var(--color-text-primary);
+    font-size: 0.8rem;
+    font-family: inherit;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23999'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+}
+
+.config-field select:focus {
+    outline: none;
+    border-color: var(--color-accent-blue);
+}
+
+/* =====================
+   SPOTLIGHT
+   ===================== */
+#spotlight-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(6px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: spotlight-fade-in 0.2s ease;
+}
+
+#spotlight-overlay.spotlight-overlay--exit {
+    animation: spotlight-fade-out 0.28s ease forwards;
+}
+
+@keyframes spotlight-fade-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@keyframes spotlight-fade-out {
+    from { opacity: 1; }
+    to   { opacity: 0; }
+}
+
+#spotlight {
+    width: 560px;
+    background: rgba(255, 255, 255, 0.97);
+    border-radius: 14px;
+    box-shadow: 0 28px 80px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    animation: spotlight-slide-in 0.25s cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+
+@keyframes spotlight-slide-in {
+    from { transform: scale(0.94) translateY(-8px); opacity: 0; }
+    to   { transform: scale(1) translateY(0);       opacity: 1; }
+}
+
+.spotlight-tagline {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    padding: 16px 20px 0;
+}
+
+.spotlight-input-row {
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    gap: 12px;
+}
+
+#spotlight-name {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 22px;
+    font-family: inherit;
+    font-weight: 300;
+    letter-spacing: 0.3px;
+    color: var(--color-text-primary);
+    padding: 22px 0;
+    background: transparent;
+}
+
+#spotlight-name::placeholder {
+    color: var(--color-text-muted);
+}
+
+@keyframes spotlight-shake {
+    0%, 100% { transform: translateX(0); }
+    20%       { transform: translateX(-6px); }
+    40%       { transform: translateX(6px); }
+    60%       { transform: translateX(-4px); }
+    80%       { transform: translateX(4px); }
+}
+
+.spotlight-confirm-btn {
+    background: #8ecfdd;
+    border: none;
+    border-radius: 8px;
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--color-text-primary);
+    font-size: 20px;
+    line-height: 1;
+    flex-shrink: 0;
+    transition: background 0.2s;
+}
+
+.spotlight-confirm-btn:hover {
+    background: var(--color-accent-blue-dark);
+}
+
+.spotlight-separator {
+    height: 1px;
+    background: var(--color-line-light);
+}
+
+.spotlight-modelo-section {
+    padding: 12px 20px 16px;
+}
+
+.spotlight-modelo-toggle {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--color-text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 0;
+    transition: color 0.2s;
+}
+
+.spotlight-modelo-toggle:hover {
+    color: var(--color-text-primary);
+}
+
+.spotlight-modelo-arrow {
+    font-size: 14px;
+    display: inline-block;
+    transition: transform 0.2s ease;
+}
+
+.spotlight-modelo-arrow.open {
+    transform: rotate(90deg);
+}
+
+.spotlight-modelo-panel {
+    display: flex;
+    gap: 16px;
+    padding-top: 14px;
+}
+
+.spotlight-select-group {
+    flex: 1;
+}
+
+.spotlight-select-group label {
+    display: block;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+    color: var(--color-text-secondary);
+    margin-bottom: 5px;
+}
+
+.spotlight-select-group select {
+    width: 100%;
+    padding: 6px 28px 6px 10px;
+    border: 1px solid var(--color-line-light);
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 0.8rem;
+    color: var(--color-text-primary);
+    background: transparent;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23999'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+}
+
+.spotlight-select-group select:focus {
+    outline: none;
+    border-color: var(--color-accent-blue);
 }
 

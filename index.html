@@ -15,6 +15,47 @@
          Todos estos IDs deben estar presentes y accesibles para que el JS de chat.js funcione.
          ===== END VERIFICACIÓN ===== -->
 
+    <!-- ===== SPOTLIGHT — Configuración inicial ===== -->
+    <div id="spotlight-overlay">
+        <div id="spotlight">
+            <p class="spotlight-tagline">Personaliza tu experiencia</p>
+            <div class="spotlight-input-row">
+                <input type="text" id="spotlight-name" placeholder="Ponle nombre a tu avatar" autocomplete="off">
+                <button type="button" id="spotlight-confirm" class="spotlight-confirm-btn">›</button>
+            </div>
+            <div class="spotlight-separator"></div>
+            <div class="spotlight-modelo-section">
+                <button type="button" id="spotlight-modelo-toggle" class="spotlight-modelo-toggle">
+                    modelo <span class="spotlight-modelo-arrow">›</span>
+                </button>
+                <div id="spotlight-modelo-panel" hidden>
+                    <div class="spotlight-modelo-panel">
+                        <div class="spotlight-select-group">
+                            <label for="spotlight-avatar">Avatar</label>
+                            <select id="spotlight-avatar">
+                                <option value="lisa" selected>lisa</option>
+                                <option value="meg">meg</option>
+                                <option value="harry">harry</option>
+                                <option value="jeff">jeff</option>
+                            </select>
+                        </div>
+                        <div class="spotlight-select-group">
+                            <label for="spotlight-style">Estilo</label>
+                            <select id="spotlight-style">
+                                <option value="casual-standing">casual-standing</option>
+                                <option value="casual-sitting" selected>casual-sitting</option>
+                                <option value="graceful-standing">graceful-standing</option>
+                                <option value="graceful-sitting">graceful-sitting</option>
+                                <option value="technical-standing">technical-standing</option>
+                                <option value="technical-sitting">technical-sitting</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="main-panel">
         <div class="panel-content">
             <canvas id="particles-canvas"></canvas>
@@ -27,6 +68,7 @@
                 <button class="menu-item" id="stopSpeaking" onclick="window.stopSpeaking()" type="button" disabled>INTERUMPIR</button>
                 <button class="menu-item" id="leftMenuClearChat" onclick="window.clearChatHistory()" type="button">LIMPIAR</button>
                 <button class="menu-item" id="leftMenuStopSession" onclick="window.stopSession()" type="button">DETENER</button>
+                <button class="menu-item" onclick="window.renombrar()" type="button">RENOMBRAR</button>
                 <button id="stopSession" type="button" hidden disabled aria-hidden="true" tabindex="-1"></button>
             </nav>
 
@@ -40,7 +82,7 @@
 
             <!-- Top Right - Join Button -->
             <button id="startSession" class="join-button" onclick="window.startSession()">
-                <span class="join-label">JOIN</span>
+                <span class="join-label">Llamar a Camila</span>
                 <div class="join-icon">+</div>
             </button>
 
@@ -76,7 +118,7 @@
                     <!-- REMOTE VIDEO HOST — Critical contract, where JS injects video/audio -->
                     <div id="remoteVideo" style="margin: 0 auto; width: 100%; min-height: 350px; display: flex; align-items: center; justify-content: center; background: transparent;">
                         <!-- Avatar image will be injected here in preview mode -->
-                        <img src="avatar-preview.png" alt="Avatar" style="max-width: 100%; max-height: 350px; display: none;" id="previewAvatarImage">
+                        <img src="assets/avatar-preview.png" alt="Avatar" style="max-width: 100%; max-height: 350px; display: none;" id="previewAvatarImage">
                     </div>
 
                     <!-- PREVIEW BANNER — Critical contract -->
@@ -119,7 +161,7 @@
             </div>
 
             <!-- Bottom Right - Action Buttons -->
-            <div class="action-buttons">
+            <div class="action-buttons" hidden>
                 <button class="profile-button" id="configToggle" onclick="window.toggleConfiguration ? window.toggleConfiguration() : toggleConfigurationPanel()">
                     <span class="profile-label">⚙️ CONFIG</span>
                     <div class="profile-icon">→</div>
@@ -128,52 +170,11 @@
         </div>
     </div>
 
-    <!-- ===== CONFIGURATION PANEL — HIDDEN BY DEFAULT (ya están seteados en código) ===== -->
-    <div id="configuration" style="display: none; position: fixed; bottom: 20px; right: 20px; background: #171717; border: 1px solid #404040; border-radius: 12px; padding: 20px; max-width: 400px; max-height: 60vh; overflow-y: auto; z-index: 1001; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
-        <!-- ⚠️ API KEYS DE PRUEBA — Solo para entorno local de desarrollo
-             NO commitear estas claves a un repositorio público.
-             Reemplazar con variables de entorno o un backend seguro antes de producción. -->
-
-        <h3 style="color: #e5e5e5; margin-bottom: 15px;">Configuration</h3>
-
-        <!-- VISIBLE FIELDS -->
-        <div style="margin-bottom: 15px;" hidden>
-            <label style="color: #a3a3a3; font-size: 0.85rem;">Region:</label>
-            <select id="region" style="width: 100%; padding: 6px; background: #0a0a0a; border: 1px solid #404040; color: #e5e5e5; border-radius: 6px;">
-                <option value="westus2">West US 2</option>
-                <option value="westeurope">West Europe</option>
-                <option value="southeastasia">Southeast Asia</option>
-                <option value="southcentralus">South Central US</option>
-                <option value="northeurope">North Europe</option>
-                <option value="swedencentral">Sweden Central</option>
-                <option value="eastus2" selected>East US 2</option>
-                <option value="eastus">East US</option>
-            </select>
-        </div>
-
-        <div style="margin-bottom: 15px;" hidden>
-            <label style="color: #a3a3a3; font-size: 0.85rem;">API Key:</label>
-            <input id="APIKey" type="password" style="width: 100%; padding: 6px; background: #0a0a0a; border: 1px solid #404040; color: #e5e5e5; border-radius: 6px; font-size: 0.75rem;" value=""/>
-        </div>
-
-        <div style="margin-bottom: 15px;" hidden>
-            <label style="color: #a3a3a3; font-size: 0.85rem;">OpenAI Endpoint:</label>
-            <input id="azureOpenAIEndpoint" type="text" style="width: 100%; padding: 6px; background: #0a0a0a; border: 1px solid #404040; color: #e5e5e5; border-radius: 6px; font-size: 0.75rem;" value="https://openaitestavatarmichael.openai.azure.com/"/>
-        </div>
-
-        <div style="margin-bottom: 15px;" hidden>
-            <label style="color: #a3a3a3; font-size: 0.85rem;">OpenAI API Key:</label>
-            <input id="azureOpenAIApiKey" type="password" style="width: 100%; padding: 6px; background: #0a0a0a; border: 1px solid #404040; color: #e5e5e5; border-radius: 6px; font-size: 0.75rem;" value=""/>
-        </div>
-
-        <div style="margin-bottom: 15px;">
-            <label style="color: #a3a3a3; font-size: 0.85rem;">Deployment Name:</label>
-            <input id="azureOpenAIDeploymentName" type="text" style="width: 100%; padding: 6px; background: #0a0a0a; border: 1px solid #404040; color: #e5e5e5; border-radius: 6px;" value="gpt-5-mini"/>
-        </div>
-
-        <div style="margin-bottom: 15px;">
-            <label style="color: #a3a3a3; font-size: 0.85rem;">Avatar:</label>
-            <select id="talkingAvatarCharacter" style="width: 100%; padding: 6px; background: #0a0a0a; border: 1px solid #404040; color: #e5e5e5; border-radius: 6px;" onchange="window.syncAvatarStyles && window.syncAvatarStyles()">
+    <!-- ===== CONFIGURATION PANEL ===== -->
+    <div id="configuration">
+        <div class="config-field">
+            <label for="talkingAvatarCharacter">Avatar</label>
+            <select id="talkingAvatarCharacter" onchange="window.syncAvatarStyles && window.syncAvatarStyles()">
                 <option value="lisa" selected>lisa</option>
                 <option value="meg">meg</option>
                 <option value="harry">harry</option>
@@ -181,9 +182,9 @@
             </select>
         </div>
 
-        <div style="margin-bottom: 15px;">
-            <label style="color: #a3a3a3; font-size: 0.85rem;">Avatar Style:</label>
-            <select id="talkingAvatarStyle" style="width: 100%; padding: 6px; background: #0a0a0a; border: 1px solid #404040; color: #e5e5e5; border-radius: 6px;">
+        <div class="config-field">
+            <label for="talkingAvatarStyle">Avatar Style</label>
+            <select id="talkingAvatarStyle">
                 <option value="casual-standing">casual-standing</option>
                 <option value="casual-sitting" selected>casual-sitting</option>
                 <option value="graceful-standing">graceful-standing</option>
@@ -193,16 +194,23 @@
             </select>
         </div>
 
-        <!-- HIDDEN FIELDS — Requeridos por chat.js pero no visibles -->
+        <!-- HIDDEN FIELDS — Requeridos por chat.js -->
+        <input id="region" type="text" hidden value="eastus2"/>
+        <input id="APIKey" type="password" hidden value=""/>
+        <input id="azureOpenAIEndpoint" type="text" hidden value=""/>
+        <input id="azureOpenAIApiKey" type="password" hidden value=""/>
+        <input id="azureOpenAIDeploymentName" type="text" hidden value="gpt-5-mini"/>
         <input id="enablePrivateEndpoint" type="checkbox" hidden/>
         <input id="privateEndpoint" type="text" hidden value=""/>
         <label for="prompt" hidden>System Prompt:</label>
-        <textarea id="prompt" hidden>You are an AI assistant that helps people find information.</textarea>
+        <textarea id="prompt" hidden>Tu nombre es {NOMBRE}. Sos {NOMBRE}, un asistente de inteligencia artificial que trabaja para NTTDATA, una empresa global de tecnología y telecomunicaciones. Cuando te pregunten tu nombre, respondés que sos {NOMBRE}. Respondés de forma precisa, profesional y amigable.
+
+IDIOMA: Siempre respondés en español, sin excepción. Si el usuario te escribe en otro idioma, primero interpretás su mensaje, luego respondés íntegramente en español. Nunca respondés en otro idioma aunque se te pida explícitamente.</textarea>
         <input id="enableOyd" type="checkbox" hidden/>
         <input id="azureCogSearchEndpoint" type="text" hidden value=""/>
         <input id="azureCogSearchApiKey" type="password" hidden value=""/>
         <input id="azureCogSearchIndexName" type="text" hidden value=""/>
-        <input id="sttLocales" type="text" hidden value="en-US,de-DE,es-ES,fr-FR,it-IT,ja-JP,ko-KR,zh-CN"/>
+        <input id="sttLocales" type="text" hidden value="es-ES"/>
         <input id="ttsVoice" type="text" hidden value="en-US-AvaMultilingualNeural"/>
         <input id="customVoiceEndpointId" type="text" hidden value=""/>
         <input id="continuousConversation" type="checkbox" hidden/>
@@ -212,10 +220,9 @@
         <input id="autoReconnectAvatar" type="checkbox" hidden/>
         <input id="useLocalVideoForIdle" type="checkbox" hidden/>
         <input id="showSubtitles" type="checkbox" hidden/>
-
-        <button onclick="document.getElementById('configuration').style.display='none';" style="width: 100%; padding: 8px; background: #3b82f6; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">Close</button>
     </div>
 
+    <script src="js/spotlight.js"></script>
     <script src="js/particles.js"></script>
     <script>
         fetch('/api/config')
@@ -231,7 +238,7 @@
         // Toggle configuration panel visibility
         function toggleConfigurationPanel() {
             const config = document.getElementById('configuration');
-            config.style.display = config.style.display === 'none' ? 'block' : 'none';
+            config.style.display = config.style.display === 'block' ? 'none' : 'block';
         }
         window.toggleConfiguration = toggleConfigurationPanel;
 
