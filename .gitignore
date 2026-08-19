@@ -1,2 +1,4 @@
 api/local.settings.json
 agent
+# graphify-axet
+.graphify/
