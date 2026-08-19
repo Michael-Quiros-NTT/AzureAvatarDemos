@@ -143,6 +143,11 @@ function disconnectAvatar() {
         speechRecognizer.close()
     }
 
+    if (peerConnection !== undefined) {
+        peerConnection.close()
+        peerConnection = undefined
+    }
+
     sessionActive = false
 }
 
@@ -745,6 +750,10 @@ window.onload = () => {
         checkLastSpeak()
     }, 2000) // Check session activity every 2 seconds
 }
+
+window.addEventListener('beforeunload', () => {
+    disconnectAvatar()
+})
 
 window.startSession = () => {
     lastInteractionTime = new Date()
