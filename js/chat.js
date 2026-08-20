@@ -297,6 +297,7 @@ function setupWebRTC(iceServerUrl, iceServerUsername, iceServerCredential) {
         // Update status bar based on connection state
         if (peerConnection.iceConnectionState === 'connected') {
             updateStatusBar('connected')
+            document.getElementById('startSession').disabled = false
         } else if (peerConnection.iceConnectionState === 'failed' || peerConnection.iceConnectionState === 'disconnected') {
             updateStatusBar('disconnected')
             if (document.getElementById('useLocalVideoForIdle').checked) {
