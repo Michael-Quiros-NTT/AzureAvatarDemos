@@ -324,12 +324,16 @@ function setupWebRTC(iceServerUrl, iceServerUsername, iceServerCredential) {
 
                 console.log("Unable to start avatar: " + cancellationDetails.errorDetails);
             }
+            disconnectAvatar()
+            updateStatusBar('disconnected')
             document.getElementById('startSession').disabled = false;
             document.getElementById('configuration').hidden = false;
         }
     }).catch(
         (error) => {
             console.log("[" + (new Date()).toISOString() + "] Avatar failed to start. Error: " + error)
+            disconnectAvatar()
+            updateStatusBar('disconnected')
             document.getElementById('startSession').disabled = false
             document.getElementById('configuration').hidden = false
         }
@@ -1092,4 +1096,9 @@ function updateStatusBar(status) {
 
 // ===== EXPOSE FUNCTIONS GLOBALLY =====
 window.updateStatusBar = updateStatusBar;
+
+window.sendQuickMessage = (text) => {
+    if (!sessionActive) return
+    handleUserQuery(text, text, '')
+}
 // togglePreviewMode ya está expuesto arriba

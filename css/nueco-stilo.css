@@ -370,7 +370,7 @@ body.session-started .join-button {
 }
 
 .chat-block::after {
-    content: '';
+    /* content: ''; */
     position: absolute;
     top: 0;
     left: 0;
@@ -520,7 +520,7 @@ body.session-started .join-button {
     width: 100%;
     min-height: 72px;
     max-height: 160px;
-    min-width: 400px;
+    min-width: unset;
     padding: 12px 14px;
     border: 1px solid var(--color-line-light);
     border-radius: 10px;
@@ -639,21 +639,455 @@ body.session-started .join-button {
     }
 }
 
+/* ============================================================
+   MOBILE REDESIGN — dark navy theme, max-width 768px
+   ============================================================ */
 @media (max-width: 768px) {
+
+    /* ── Base ─────────────────────────────────────────────── */
+    html, body {
+        background: #0D1B3E;
+    }
+
+    .panel-content {
+        background: #0D1B3E;
+        display: flex;
+        flex-direction: column;
+        height: auto;
+        min-height: 100dvh;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    #particles-canvas {
+        display: none;
+    }
+
+    /* ── Header ───────────────────────────────────────────── */
     .brand-logo {
+        position: static;
+        order: 0;
+        padding: 16px 20px 8px;
+        font-size: 12px;
+        color: rgba(255,255,255,0.45);
+        font-style: normal;
+        font-weight: 500;
+        letter-spacing: 2px;
+    }
+
+    .top-status-bar {
+        position: static;
+        order: 1;
+        justify-content: flex-end;
+        padding: 0 20px 8px;
+    }
+
+    .status-bar {
+        gap: 6px;
+    }
+
+    .status-label {
+        font-size: 10px;
+        color: #A8C0E8;
+    }
+
+    /* ── Left menu — hidden on mobile ────────────────────── */
+    .left-menu {
+        display: none;
+    }
+
+    /* ── Hero text ────────────────────────────────────────── */
+    .hero-text {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        bottom: 80px;
+        left: 20px;
+        z-index: 5;
+        pointer-events: none;
+    }
+
+    .hero-text__line1,
+    .hero-text__line2 {
+        font-size: 26px;
+        font-weight: 700;
+        color: #FFFFFF;
+        line-height: 1.18;
+        text-shadow: 0 2px 12px rgba(13,27,62,0.7);
+    }
+
+    /* hidden on desktop */
+    body:not(.session-started) .hero-text {
+        display: flex;
+    }
+
+    body.session-started .hero-text {
+        display: none;
+    }
+
+    /* ── Avatar / Hero section ────────────────────────────── */
+    .avatar-container {
+        position: relative;
+        order: 2;
+        width: 100%;
+        height: 52vh;
+        height: 52dvh;
+        overflow: hidden;
+        flex-shrink: 0;
+        background: #0D1B3E;
+    }
+
+    #videoContainer {
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        max-width: unset !important;
+        margin: 0 !important;
+        border-radius: 0 !important;
+        background: transparent !important;
+        overflow: hidden !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: flex-start !important;
+    }
+
+    #remoteVideo {
+        width: 100% !important;
+        min-height: unset !important;
+        height: 100% !important;
+        position: relative;
+        background: transparent !important;
+    }
+
+    /* video inyectado por JS — centrar y recortar al contenedor */
+    #remoteVideo video,
+    #videoPlayer {
+        position: absolute !important;
+        left: 50% !important;
+        top: 0 !important;
+        transform: translateX(-50%) !important;
+        height: 100% !important;
+        width: auto !important;
+    }
+
+    #localVideo {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    #localVideo video {
+        height: 100%;
+        width: auto;
+    }
+
+    /* gradiente que funde el avatar con el fondo */
+    .avatar-container::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+            to bottom,
+            transparent 40%,
+            #0D1B3E 100%
+        );
+        pointer-events: none;
+        z-index: 4;
+    }
+
+    /* ── Join button — mobile pill ───────────────────────── */
+    .join-button {
+        position: absolute;
+        bottom: 24px;
+        left: 50%;
+        right: auto;
+        transform: translateX(-50%);
+        background: #2D6BE4;
+        border-color: #2D6BE4;
+        border-radius: 24px;
+        padding: 12px 28px;
+        height: auto;
+        gap: 10px;
+        z-index: 6;
+    }
+
+    .join-label {
+        color: #FFFFFF;
+        font-size: 10px;
+        letter-spacing: 1.5px;
+    }
+
+    .join-icon {
+        background-color: rgba(255,255,255,0.2);
+        color: #FFFFFF;
+    }
+
+    .join-button:hover {
+        background-color: #1a57d4;
+    }
+
+    .join-button:hover .join-label {
+        color: #FFFFFF;
+    }
+
+    /* ── Quick actions ────────────────────────────────────── */
+    .quick-actions {
+        order: 3;
+        display: none;
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        flex-direction: row;
+        gap: 8px;
+        padding: 14px 20px 4px;
+        flex-shrink: 0;
+    }
+
+    .quick-actions::-webkit-scrollbar {
+        display: none;
+    }
+
+    body.session-started .quick-actions {
+        display: flex;
+    }
+
+    .quick-chip {
+        background: rgba(255,255,255,0.07);
+        border: 1px solid rgba(255,255,255,0.14);
+        border-radius: 20px;
+        padding: 7px 16px;
+        font-size: 11px;
+        font-weight: 500;
+        color: #A8C0E8;
+        white-space: nowrap;
+        flex-shrink: 0;
+        cursor: pointer;
+        font-family: inherit;
+        transition: background 0.2s, color 0.2s;
+    }
+
+    .quick-chip:hover,
+    .quick-chip:active {
+        background: rgba(45,107,228,0.3);
+        color: #FFFFFF;
+        border-color: #2D6BE4;
+    }
+
+    /* ── Chat block ───────────────────────────────────────── */
+    .chat-block {
+        position: static !important;
+        order: 4;
+        width: 100%;
+        max-width: unset;
+        height: auto;
+        padding: 8px 20px 0;
+        background: transparent;
+        gap: 0;
+        justify-content: flex-start;
+    }
+
+    .chat-block::after {
+        display: none;
+    }
+
+    #chatHistory {
+        max-height: 30vh;
+        max-height: 30dvh;
+        min-height: unset;
+        border-radius: 0;
+        padding: 8px 0;
+        background: transparent;
+        color: #FFFFFF;
+    }
+
+    /* burbujas del chat — dark theme */
+    #chatHistory .chat-bubble,
+    .chat-bubble {
+        font-size: 13px;
+        line-height: 1.5;
+        padding: 10px 14px;
+        border-radius: 12px;
+        margin-bottom: 8px;
+        max-width: 85%;
+        word-break: break-word;
+    }
+
+    #chatHistory .chat-bubble--assistant,
+    .chat-bubble--assistant {
+        background: #1A2B5E;
+        color: #A8C0E8;
+        border-radius: 0 12px 12px 12px;
+        align-self: flex-start;
+    }
+
+    #chatHistory .chat-bubble--user,
+    .chat-bubble--user {
+        background: #2D6BE4;
+        color: #FFFFFF;
+        border-radius: 12px 0 12px 12px;
+        align-self: flex-end;
+        margin-left: auto;
+    }
+
+    /* ── Chat input wrapper — fixed bottom bar ───────────── */
+    .chat-input-wrapper {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        display: flex;
+        flex-direction: row;
+        align-items: flex-end;
+        gap: 10px;
+        padding: 10px 68px 28px 16px;
+        background: #0D1B3E;
+        border-top: 1px solid rgba(255,255,255,0.07);
+        z-index: 50;
+    }
+
+    #userMessageBox {
+        flex: 1;
+        min-width: 0;
+        min-height: 44px;
+        max-height: 120px;
+        padding: 10px 14px;
+        background: #1A2B5E;
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 12px;
+        color: #FFFFFF;
         font-size: 14px;
+        box-shadow: none;
     }
 
-    .menu-item {
-        font-size: 7px;
+    #userMessageBox:focus {
+        border-color: #2D6BE4;
+        box-shadow: 0 0 0 2px rgba(45,107,228,0.25);
     }
 
-    .person-name {
-        font-size: 24px;
+    /* paddding bottom para que el chat no quede tapado por el input fijo */
+    .chat-block {
+        padding-bottom: 90px;
     }
 
-    .person-tagline {
-        font-size: 9px;
+    /* ── Mic button — fixed bottom-right, alineado con el input bar ── */
+    .floating-mic-button {
+        position: fixed;
+        right: 16px;
+        bottom: 18px;
+        left: auto;
+        transform: none;
+        z-index: 51;
+        width: 44px;
+        height: 44px;
+        background: #2D6BE4;
+        border-color: #2D6BE4;
+        border-radius: 50%;
+    }
+
+    .floating-mic-button:hover:not([disabled]) {
+        background: #1a57d4;
+    }
+
+    #microphone.mic-active {
+        background: #00C9B1;
+        border-color: #00C9B1;
+    }
+
+    body.session-started .chat-input-wrapper {
+        display: flex;
+    }
+
+    body:not(.session-started) .chat-input-wrapper {
+        display: none;
+    }
+
+    /* ── Spotlight — dark theme mobile ───────────────────── */
+    #spotlight-overlay {
+        background: rgba(13,27,62,0.92);
+    }
+
+    #spotlight {
+        background: #122050;
+        box-shadow: 0 28px 80px rgba(0,0,0,0.5);
+    }
+
+    .spotlight-tagline {
+        color: #6B86B8;
+    }
+
+    #spotlight-name {
+        color: #FFFFFF;
+        font-size: 20px;
+    }
+
+    #spotlight-name::placeholder {
+        color: #4A6B9A;
+    }
+
+    .spotlight-separator {
+        background: rgba(255,255,255,0.08);
+    }
+
+    .spotlight-modelo-toggle {
+        color: #6B86B8;
+    }
+
+    .spotlight-select-group label {
+        color: #6B86B8;
+    }
+
+    .spotlight-select-group select {
+        color: #FFFFFF;
+        border-color: rgba(255,255,255,0.12);
+        background-color: #1A2B5E;
+    }
+
+    /* ── Liquid card — dark ──────────────────────────────── */
+    .liquid-card {
+        background: #1A2B5E;
+        box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+        right: 16px;
+    }
+
+    .liquid-card-name {
+        color: #FFFFFF;
+    }
+
+    .liquid-card-role {
+        color: #6B86B8;
+    }
+
+    /* ── Configuration panel ─────────────────────────────── */
+    #configuration {
+        background: #122050;
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 12px;
+        top: 60px;
+        right: 12px;
+        width: calc(100vw - 24px);
+        max-width: 320px;
+    }
+
+    .config-field label {
+        color: #4A9EFF;
+    }
+
+    .config-field select {
+        color: #FFFFFF;
+        border-color: rgba(255,255,255,0.12);
+    }
+
+    /* ── Preview banner ──────────────────────────────────── */
+    #previewBanner {
+        top: 70px;
     }
 }
 
@@ -819,7 +1253,7 @@ body.session-started .join-button {
 }
 
 #spotlight {
-    width: 560px;
+    width: min(560px, 92vw);
     background: rgba(255, 255, 255, 0.97);
     border-radius: 14px;
     box-shadow: 0 28px 80px rgba(0, 0, 0, 0.3);

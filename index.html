@@ -43,8 +43,8 @@
                         <div class="spotlight-select-group">
                             <label for="spotlight-style">Estilo</label>
                             <select id="spotlight-style">
-                                <option value="casual-standing">casual-standing</option>
-                                <option value="casual-sitting" selected>casual-sitting</option>
+                                <option value="casual-standing" selected>casual-standing</option>
+                                <option value="casual-sitting">casual-sitting</option>
                                 <option value="graceful-standing">graceful-standing</option>
                                 <option value="graceful-sitting">graceful-sitting</option>
                                 <option value="technical-standing">technical-standing</option>
@@ -109,6 +109,12 @@
             <!-- Center Visual - Avatar Area with Video -->
             <div class="avatar-container">
                 <!-- <div class="avatar-backdrop"></div> -->
+
+                <!-- HERO TEXT — visible only on mobile, overlaid on avatar -->
+                <div class="hero-text" aria-hidden="true">
+                    <span class="hero-text__line1">Tu asistente,</span>
+                    <span class="hero-text__line2">siempre listo</span>
+                </div>
                 
                 <!-- VIDEO CONTAINER — Critical contract with JS -->
                 <div id="videoContainer" style="position: relative;max-width: 100%;height: 70vh;margin: auto auto;border-radius: 12px;overflow: hidden;background: #ffffff;display: flex;justify-content: center;top: 21vh;">
@@ -147,6 +153,13 @@
                 <button id="stopSession" onclick="window.stopSession()" class="control-btn danger" disabled>End</button>
                 <button id="togglePreviewMode" onclick="window.togglePreviewMode()" class="control-btn preview">Preview</button>
             </div> -->
+
+            <!-- QUICK ACTIONS — chips de acceso rápido, solo mobile, solo en sesión -->
+            <div class="quick-actions" id="quick-actions">
+                <button class="quick-chip" type="button" onclick="window.sendQuickMessage && window.sendQuickMessage('¿Qué puedes hacer?')">¿Qué puedes hacer?</button>
+                <button class="quick-chip" type="button" onclick="window.sendQuickMessage && window.sendQuickMessage('Preséntate')">Preséntate</button>
+                <button class="quick-chip" type="button" onclick="window.sendQuickMessage && window.sendQuickMessage('¿Quién eres?')">¿Quién eres?</button>
+            </div>
 
             <!-- Bottom Left - Chat Block -->
             <div class="chat-block">
@@ -199,8 +212,8 @@
         <div class="config-field">
             <label for="talkingAvatarStyle">Avatar Style</label>
             <select id="talkingAvatarStyle">
-                <option value="casual-standing">casual-standing</option>
-                <option value="casual-sitting" selected>casual-sitting</option>
+                <option value="casual-standing" selected>casual-standing</option>
+                <option value="casual-sitting">casual-sitting</option>
                 <option value="graceful-standing">graceful-standing</option>
                 <option value="graceful-sitting">graceful-sitting</option>
                 <option value="technical-standing">technical-standing</option>
@@ -258,6 +271,10 @@ IDIOMA: Siempre respondés en español, sin excepción. Si el usuario te escribe
             config.style.display = config.style.display === 'block' ? 'none' : 'block';
         }
         window.toggleConfiguration = toggleConfigurationPanel;
+
+        window.addEventListener('pagehide', () => {
+            if (typeof disconnectAvatar === 'function') disconnectAvatar()
+        });
 
         const avatarStylesByCharacter = {
             lisa: ['casual-standing', 'casual-sitting', 'graceful-standing', 'graceful-sitting', 'technical-standing', 'technical-sitting'],
