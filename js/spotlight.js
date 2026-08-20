@@ -25,7 +25,7 @@
 
     function confirm() {
         const nameInput = document.getElementById('spotlight-name')
-        const name = nameInput.value.trim() || 'Camila'
+        const name = nameInput.value.trim() || 'Avatar'
         const avatar = document.getElementById('spotlight-avatar').value
         const style = document.getElementById('spotlight-style').value
 
@@ -77,7 +77,7 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-        document.getElementById('spotlight-name').focus()
+        confirm()
 
         document.getElementById('spotlight-avatar').addEventListener('change', syncSpotlightStyles)
 
