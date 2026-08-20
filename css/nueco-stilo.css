@@ -13,7 +13,7 @@
     --gris-borde:  #E8ECF4;
     --gris-texto:  #63729B;
     --sombra:      rgba(25, 62, 130, 0.10);
-    --font-serif:  'Playfair Display', Georgia, serif;
+    --font-serif:  'Playfair Display', 'Helvetica Neue', Helvetica, system-ui, sans-serif;
     --font-sans:   'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
     /* compat vars used by inherited styles */
     --background-color: #FFFFFF;
