@@ -89,13 +89,15 @@
             <!-- HERO SECTION -->
             <section class="hero-section">
                 <div class="hero-content">
-                    <p class="hero-greeting">Hola, María 👋</p>
-                    <h1 class="hero-title">
-                        Hoy todo puede estar<br>
-                        <span class="hero-title__accent">bajo control</span>
-                    </h1>
-                    <div class="hero-divider"></div>
-                    <p class="hero-description">Soy tu asistente de pagos. Estoy aquí para ayudarte a pagar, recordar lo que te falta y que tengas el control de tus finanzas.</p>
+                    <p class="hero-greeting">Hola, Avatar 👋</p>
+                    <div class="hero-dynamic">
+                        <h1 class="hero-title">
+                            Hoy todo puede estar<br>
+                            <span class="hero-title__accent">bajo control</span>
+                        </h1>
+                        <div class="hero-divider"></div>
+                        <p class="hero-description">Soy tu asistente de pagos. Estoy aquí para ayudarte a pagar, recordar lo que te falta y que tengas el control de tus finanzas.</p>
+                    </div>
                 </div>
 
                 <!-- VIDEO CONTAINER — Critical contract with JS -->
@@ -354,11 +356,26 @@
         <input id="enablePrivateEndpoint" type="checkbox" hidden/>
         <input id="privateEndpoint" type="text" hidden value=""/>
         <label for="prompt" hidden>System Prompt:</label>
-        <textarea id="prompt" hidden>Tu nombre es {NOMBRE}. Sos {NOMBRE}, un asistente de inteligencia artificial que trabaja para NTTDATA, una empresa global de tecnología y telecomunicaciones. Cuando te pregunten tu nombre, respondés que sos {NOMBRE}. Respondés de forma precisa, profesional y amigable.
+        <textarea id="prompt" hidden>Sos {NOMBRE}, el asistente virtual de AvalPay — la app de pagos digitales del Grupo Aval de Colombia. Cuando te pregunten tu nombre, respondés que sos {NOMBRE}. Respondés de forma precisa, cálida y profesional.
 
-EQUIPO: Esta aplicación fue desarrollada por Michael Quiros (Desarrollador) y liderada por Jorge Castillo (Líder del proyecto). Cuando te pregunten quién hizo la app, quién la desarrolló, o quién es el líder, mencionás a estas personas por nombre completo y rol.
+ROL: Ayudás a los usuarios a pagar facturas, servicios públicos y convenios desde la app AvalPay. Conocés el estado de cuenta del usuario y podés guiarlo paso a paso en cualquier pago.
 
-IDIOMA: Siempre respondés en español, sin excepción. Si el usuario te escribe en otro idioma, primero interpretás su mensaje, luego respondés íntegramente en español. Nunca respondés en otro idioma aunque se te pida explícitamente.</textarea>
+DATOS DE DEMO — Usuario: María García:
+- Facturas pendientes (3):
+  · Codensa (Electricidad): $45.200 — vence 25 ago 2026
+  · Gas Natural Fenosa: $28.500 — vence 28 ago 2026
+  · Claro Internet: $62.000 — vence 30 ago 2026
+- Pagos programados esta semana:
+  · Arriendo Apto 301: $950.000 — miércoles 22 ago
+  · Seguro de Vida Bolívar: $85.000 — viernes 24 ago
+- Saldo disponible: $1.245.800 (Cuenta de ahorros Banco de Bogotá)
+- Convenios disponibles: ETB, Acueducto de Bogotá, EPM, DIAN, Telmex, Claro, Movistar
+
+Cuando el usuario pregunta por facturas, pagos pendientes, saldo o convenios, respondés usando estos datos de demo como si fueran reales. Hablás en primera persona como si ya tuvieras acceso a la cuenta.
+
+EQUIPO: Esta aplicación fue desarrollada por Michael Quiros (Desarrollador) y liderada por Jorge Castillo (Líder del proyecto).
+
+IDIOMA: Siempre respondés en español, sin excepción. Si el usuario te escribe en otro idioma, respondés íntegramente en español.</textarea>
         <input id="enableOyd" type="checkbox" hidden/>
         <input id="azureCogSearchEndpoint" type="text" hidden value=""/>
         <input id="azureCogSearchApiKey" type="password" hidden value=""/>
@@ -375,6 +392,7 @@ IDIOMA: Siempre respondés en español, sin excepción. Si el usuario te escribe
         <input id="showSubtitles" type="checkbox" hidden/>
     </div>
 
+    <script src="js/avalpay-widgets.js"></script>
     <script src="js/spotlight.js"></script>
     <script src="js/particles.js"></script>
     <script src="js/liquid.js"></script>

@@ -689,6 +689,8 @@ function handleUserQuery(userQuery, userQueryHTML, imgUrlPath) {
         }
 
         messages.push(assistantMessage)
+
+        if (window.avalPayWidgets) window.avalPayWidgets.onAssistantReply(assistantReply)
     })
     .catch((error) => {
         activeAssistantBubble = null

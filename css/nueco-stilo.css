@@ -197,6 +197,148 @@ html, body {
     color: #3D4F80;
 }
 
+/* ── Hero Dynamic Zone ──────────────────────────────────────── */
+.hero-dynamic {
+    transition: opacity 0.18s ease;
+}
+.hero-dynamic--exit {
+    opacity: 0;
+    pointer-events: none;
+}
+
+@keyframes hw-in {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── AvalPay Widgets (.hw) ───────────────────────────────────── */
+.hw {
+    animation: hw-in 0.28s ease;
+}
+
+.hw__label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--gris-texto);
+    margin-bottom: 8px;
+}
+
+.hw__list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 10px;
+}
+
+.hw__item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--gris-fondo);
+    border-radius: 10px;
+    padding: 7px 10px;
+    gap: 4px;
+}
+
+.hw__item-left {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.hw__item-name {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--azul-texto);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.hw__item-sub {
+    font-size: 9px;
+    color: var(--gris-texto);
+    margin-top: 1px;
+}
+
+.hw__item-amount {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--azul);
+    flex-shrink: 0;
+}
+
+.hw__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 4px;
+}
+
+.hw__total {
+    font-size: 10px;
+    color: var(--gris-texto);
+}
+
+.hw__total strong {
+    color: var(--azul-texto);
+}
+
+.hw__cta {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 5px 12px;
+    border-radius: 20px;
+    background: var(--azul);
+    color: var(--blanco);
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.15s;
+    flex-shrink: 0;
+}
+.hw__cta:hover { opacity: 0.85; }
+
+.hw__cta--ghost {
+    background: transparent;
+    color: var(--azul);
+    border: 1.5px solid var(--azul);
+    margin-top: 8px;
+    width: 100%;
+}
+
+/* Saldo */
+.hw--saldo { text-align: left; }
+.hw__saldo-valor {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--azul-oscuro);
+    letter-spacing: -0.5px;
+    margin: 4px 0 2px;
+}
+.hw__saldo-cuenta {
+    font-size: 9px;
+    color: var(--gris-texto);
+    margin-bottom: 8px;
+}
+
+/* Convenios */
+.hw__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-bottom: 10px;
+}
+.hw__chip {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 4px 9px;
+    border-radius: 20px;
+    background: var(--azul-claro);
+    color: var(--azul);
+}
+
 /* Gradient bottom fade */
 .hero-section::after {
     content: '';
