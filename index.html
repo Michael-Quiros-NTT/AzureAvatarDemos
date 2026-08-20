@@ -4,16 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Avatar Chat - LEEROY</title>
-    <!-- <link rel="stylesheet" href="css/styles.css"> -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/chat-modern.css">
     <link rel="stylesheet" href="css/nueco-stilo.css">
     <script src="https://aka.ms/csspeech/jsbrowserpackageraw"></script>
     <script src="js/chat.js"></script>
 </head>
 <body>
-    <!-- ===== VERIFICACIÓN DE CONTRATOS DOM =====
-         Todos estos IDs deben estar presentes y accesibles para que el JS de chat.js funcione.
-         ===== END VERIFICACIÓN ===== -->
 
     <!-- ===== SPOTLIGHT — Configuración inicial ===== -->
     <div id="spotlight-overlay">
@@ -68,132 +67,268 @@
         </div>
     </div>
 
-    <div class="main-panel">
-        <div class="panel-content">
-            <canvas id="particles-canvas"></canvas>
-            <!-- Logo -->
-            <div class="brand-logo">NTTDATA avatar</div>
+    <!-- ===== APP SHELL ===== -->
+    <div class="app-shell">
+        <canvas id="particles-canvas"></canvas>
 
-            <!-- Left Navigation Menu -->
-            <nav class="left-menu">
-                <button id="togglePreviewMode" onclick="window.togglePreviewMode()" class="menu-item" type="button">PREVIEW</button>
-                <button class="menu-item" id="stopSpeaking" onclick="window.stopSpeaking()" type="button" disabled>INTERUMPIR</button>
-                <button class="menu-item" id="leftMenuClearChat" onclick="window.clearChatHistory()" type="button">LIMPIAR</button>
-                <button class="menu-item" id="leftMenuStopSession" onclick="window.stopSession()" type="button">DETENER</button>
-                <button class="menu-item" onclick="window.renombrar()" type="button">RENOMBRAR</button>
-                <button id="stopSession" type="button" hidden disabled aria-hidden="true" tabindex="-1"></button>
-            </nav>
-
-            <!-- TOP STATUS BAR -->
-            <div class="top-status-bar">
+        <!-- FIXED HEADER -->
+        <header class="app-header">
+            <div class="app-header__logo">NTT<span>data</span> avatar</div>
+            <div class="app-header__right">
                 <div class="status-bar">
                     <span class="status-dot" id="sessionStatus"></span>
                     <span class="status-label" id="sessionStatusLabel">Disconnected</span>
                 </div>
+                <div class="header-user-chip">MP</div>
             </div>
+        </header>
 
-            <!-- Top Right - Join Button -->
-            <button id="startSession" class="join-button" onclick="window.startSession()">
-                <span class="join-label">Llamar a Camila</span>
-                <div class="join-icon">+</div>
-            </button>
+        <!-- SCROLLABLE MAIN -->
+        <main class="app-main">
 
-            <!-- Bottom Center - Microphone Action -->
-            <button id="microphone" class="floating-mic-button" onclick="window.microphone()" type="button" disabled>
-                <span class="mic-wave mic-wave-1"></span>
-                <span class="mic-wave mic-wave-2"></span>
-                <span class="mic-wave mic-wave-3"></span>
-                <img src="assets/audio.png" alt="Micrófono" class="mic-icon">
-            </button>
-
-            <!-- Center Visual - Avatar Area with Video -->
-            <div class="avatar-container">
-                <!-- <div class="avatar-backdrop"></div> -->
-
-                <!-- HERO TEXT — visible only on mobile, overlaid on avatar -->
-                <div class="hero-text" aria-hidden="true">
-                    <span class="hero-text__line1">Tu asistente,</span>
-                    <span class="hero-text__line2">siempre listo</span>
+            <!-- HERO SECTION -->
+            <section class="hero-section">
+                <div class="hero-content">
+                    <p class="hero-greeting">Hola, María 👋</p>
+                    <h1 class="hero-title">
+                        Hoy todo puede estar<br>
+                        <span class="hero-title__accent">bajo control</span>
+                    </h1>
+                    <div class="hero-divider"></div>
+                    <p class="hero-description">Soy tu asistente de pagos. Estoy aquí para ayudarte a pagar, recordar lo que te falta y que tengas el control de tus finanzas.</p>
                 </div>
-                
+
                 <!-- VIDEO CONTAINER — Critical contract with JS -->
-                <div id="videoContainer" style="position: relative;max-width: 100%;height: 70vh;margin: auto auto;border-radius: 12px;overflow: hidden;background: #ffffff;display: flex;justify-content: center;top: 21vh;">
-                    
-                    <!-- OVERLAY AREA — Critical contract -->
-                    <div id="overlayArea" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10;">
-                        <!-- CHAT HISTORY — Critical contract, contentEditable -->
-                        <!-- <div id="chatHistory" style="border: none; resize: none; background-color: transparent; overflow: hidden; display: none;" contentEditable="true" hidden></div> -->
-                    </div>
-
-                    <!-- SUBTITLES — Critical contract -->
-                    <div id="subtitles" style="width: 100%; text-align: center; color: white; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000; position: absolute; bottom: 5%; z-index: 999;" hidden></div>
-
-                    <!-- LOCAL VIDEO FALLBACK — Critical contract -->
+                <div id="videoContainer" class="hero-video-container">
+                    <div id="overlayArea" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:10;"></div>
+                    <div id="subtitles" style="width:100%;text-align:center;color:white;text-shadow:-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000,1px 1px 0 #000;position:absolute;bottom:5%;z-index:999;" hidden></div>
                     <div id="localVideo" hidden>
                         <video src="assets/video/lisa-casual-sitting-idle.mp4" autoplay loop muted></video>
                     </div>
-
-                    <!-- REMOTE VIDEO HOST — Critical contract, where JS injects video/audio -->
-                    <div id="remoteVideo" style="margin: 0 auto; width: 100%; min-height: 350px; display: flex; align-items: center; justify-content: center; background: transparent;">
-                        <!-- Avatar image will be injected here in preview mode -->
-                        <img src="assets/avatar-preview.png" alt="Avatar" style="max-width: 100%; max-height: 350px; display: none;" id="previewAvatarImage">
+                    <div id="remoteVideo" style="margin:0 auto;width:100%;min-height:200px;display:flex;align-items:center;justify-content:center;background:transparent;">
+                        <img src="assets/avatar-preview.png" alt="Avatar" style="max-width:100%;max-height:100%;display:none;" id="previewAvatarImage">
                     </div>
-
-                    <!-- PREVIEW BANNER — Critical contract -->
-                    <div id="previewBanner" class="preview-banner" hidden style="position: absolute; top: 10px; left: 50%; transform: translateX(-50%); background-color: rgba(245, 158, 11, 0.15); border: 1px solid #f59e0b; border-radius: 9999px; color: #f59e0b; font-size: 0.75rem; font-weight: 600; padding: 6px 16px; z-index: 1000; white-space: nowrap;">⚠️ PREVIEW MODE</div>
-                </div>
-            </div>
-
-            <!-- CONTROL BUTTONS BAR -->
-            <!-- <div class="controls-bar" style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: end; margin: 20px 0; padding: 0 20px;">
-                <button id="startSession" onclick="window.startSession()" class="control-btn primary">Start</button>
-                <button id="microphone" onclick="window.microphone()" class="control-btn" disabled>Mic</button>
-                <button id="stopSpeaking" onclick="window.stopSpeaking()" class="control-btn" disabled>Stop</button>
-                <button id="clearChatHistory" onclick="window.clearChatHistory()" class="control-btn">Clear</button>
-                <button id="stopSession" onclick="window.stopSession()" class="control-btn danger" disabled>End</button>
-                <button id="togglePreviewMode" onclick="window.togglePreviewMode()" class="control-btn preview">Preview</button>
-            </div> -->
-
-            <!-- QUICK ACTIONS — chips de acceso rápido, solo mobile, solo en sesión -->
-            <div class="quick-actions" id="quick-actions">
-                <button class="quick-chip" type="button" onclick="window.sendQuickMessage && window.sendQuickMessage('¿Qué puedes hacer?')">¿Qué puedes hacer?</button>
-                <button class="quick-chip" type="button" onclick="window.sendQuickMessage && window.sendQuickMessage('Preséntate')">Preséntate</button>
-                <button class="quick-chip" type="button" onclick="window.sendQuickMessage && window.sendQuickMessage('¿Quién eres?')">¿Quién eres?</button>
-            </div>
-
-            <!-- Bottom Left - Chat Block -->
-            <div class="chat-block">
-                <div class="chat-header" hidden>
-                    <h2 class="chat-title">Chat</h2>
-                    <div id="sessionStatusLabel2" style="font-size: 0.75rem; color: #a3a3a3;">Ready to chat</div>
+                    <div id="previewBanner" class="preview-banner" hidden>⚠️ PREVIEW MODE</div>
                 </div>
 
-                <!-- CHAT HISTORY — Real avatar transcript area -->
-                <div id="chatHistory" contentEditable="true" >
+                <!-- Orbe decorativo del asistente -->
+                <div class="hero-orb" aria-hidden="true">
+                    <svg viewBox="0 0 48 28" fill="none" xmlns="http://www.w3.org/2000/svg" width="42" height="24">
+                        <ellipse cx="13" cy="12" rx="6" ry="6" fill="#0A5BFF" opacity="0.85"/>
+                        <ellipse cx="35" cy="12" rx="6" ry="6" fill="#0A5BFF" opacity="0.85"/>
+                        <path d="M7 18 Q24 30 41 18" stroke="#0A5BFF" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+                    </svg>
                 </div>
-                
-                <!-- CHAT INPUT AREA — Real avatar chat uses #showTypeMessage + #userMessageBox -->
+            </section>
+
+            <!-- ASSISTANT PROMPT CARD -->
+            <section class="assistant-card">
+                <div class="assistant-card__header">
+                    <span class="assistant-card__spark">✨</span>
+                    <div class="assistant-card__question">
+                        <p>¿Qué necesitas</p>
+                        <p>que haga hoy?</p>
+                    </div>
+                    <div class="assistant-card__btns">
+                        <!-- #microphone — Critical contract -->
+                        <button id="microphone" class="floating-mic-button" onclick="window.microphone()" type="button" disabled>
+                            <span class="mic-wave mic-wave-1"></span>
+                            <span class="mic-wave mic-wave-2"></span>
+                            <span class="mic-wave mic-wave-3"></span>
+                            <img src="assets/audio.png" alt="Micrófono" class="mic-icon">
+                        </button>
+                    </div>
+                </div>
+                <hr class="assistant-card__sep">
+
+                <!-- Quick actions 2×2 grid — hidden during session -->
+                <div class="quick-actions-grid" id="quick-actions">
+                    <button class="quick-chip" type="button" onclick="window.sendQuickMessage && window.sendQuickMessage('Tengo 3 cosas por resolver')">Tengo 3 cosas por resolver</button>
+                    <button class="quick-chip" type="button" onclick="window.sendQuickMessage && window.sendQuickMessage('¿Qué me falta por pagar?')">¿Qué me falta por pagar?</button>
+                    <button class="quick-chip" type="button" onclick="window.sendQuickMessage && window.sendQuickMessage('Pagar todo lo pendiente')">Pagar todo lo pendiente</button>
+                    <button class="quick-chip" type="button" onclick="window.sendQuickMessage && window.sendQuickMessage('Recuérdame mis pagos')">Recuérdame mis pagos</button>
+                </div>
+
+                <!-- Chat transcript — shown during session -->
+                <div id="chatHistory" contentEditable="true"></div>
+
+                <!-- Chat input (controlado por JS) -->
                 <div class="chat-input-wrapper">
-                    <div id="showTypeMessageCheckbox" hidden style="display: none; align-items: center; gap: 8px; margin-bottom: 10px; color: #a3a3a3; font-size: 0.75rem;">
+                    <div id="showTypeMessageCheckbox" hidden style="display:none;align-items:center;gap:8px;margin-bottom:10px;color:#a3a3a3;font-size:0.75rem;">
                         <input type="checkbox" id="showTypeMessage" onchange="window.updateTypeMessageBox()">
                         <label for="showTypeMessage">Type message</label>
                     </div>
                     <div id="userMessageBox" hidden contentEditable="true"></div>
                 </div>
 
-                <!-- UPLOAD ICON — Critical contract -->
-                <img id="uploadImgIcon" src="assets/attachment.jpg" alt="Attach" style="cursor: pointer; width: 20px; height: 20px; display: none; margin-top: 8px;">
+                <img id="uploadImgIcon" src="assets/attachment.jpg" alt="Attach" style="cursor:pointer;width:20px;height:20px;display:none;margin-top:8px;">
+            </section>
+
+            <!-- SHORTCUTS SECTION -->
+            <section class="shortcuts-section">
+                <div class="shortcut-item" onclick="window.sendQuickMessage && window.sendQuickMessage('Pagar mis facturas')">
+                    <div class="shortcut-icon-box">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0A5BFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                    </div>
+                    <span class="shortcut-badge">3</span>
+                    <span class="shortcut-label">Pagar mis<br>facturas</span>
+                </div>
+                <div class="shortcut-item" onclick="window.sendQuickMessage && window.sendQuickMessage('¿Qué tengo por pagar esta semana?')">
+                    <div class="shortcut-icon-box">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0A5BFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                    </div>
+                    <span class="shortcut-label">¿Qué tengo<br>por pagar<br>esta semana?</span>
+                </div>
+                <div class="shortcut-item" onclick="window.sendQuickMessage && window.sendQuickMessage('Pagar servicios públicos')">
+                    <div class="shortcut-icon-box">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0A5BFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+                    </div>
+                    <span class="shortcut-label">Pagar servicios<br>públicos</span>
+                </div>
+                <div class="shortcut-item" onclick="window.sendQuickMessage && window.sendQuickMessage('¿Cómo voy este mes?')">
+                    <div class="shortcut-icon-box">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0A5BFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                    </div>
+                    <span class="shortcut-label">¿Cómo voy<br>este mes?</span>
+                </div>
+            </section>
+
+            <!-- PENDING PAYMENTS SECTION -->
+            <section class="payments-section">
+                <div class="payments-section__header">
+                    <h2 class="payments-section__title">Tus pagos pendientes</h2>
+                    <span class="payments-badge">3</span>
+                    <button class="payments-action" type="button">Ver todos ›</button>
+                </div>
+
+                <div class="payment-summary-card">
+                    <div class="payment-summary-card__icon">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                    </div>
+                    <div class="payment-summary-card__info">
+                        <p class="payment-summary-card__label">Tienes 3 pagos próximos</p>
+                        <p class="payment-summary-card__amount">$ 3.617.200</p>
+                        <p class="payment-summary-card__due">El primero vence en 2 días</p>
+                    </div>
+                    <button class="payment-summary-card__arrow" type="button">›</button>
+                </div>
+
+                <div class="payment-list">
+                    <div class="payment-item">
+                        <div class="payment-item__logo payment-item__logo--epm">epm</div>
+                        <div class="payment-item__info">
+                            <p class="payment-item__name">EPM</p>
+                            <p class="payment-item__sub">Servicios públicos</p>
+                            <p class="payment-item__due">Vence el 15 de mayo</p>
+                        </div>
+                        <div class="payment-item__right">
+                            <p class="payment-item__amount">$ 156.900</p>
+                            <button class="payment-item__arrow" type="button">›</button>
+                        </div>
+                    </div>
+                    <div class="payment-item">
+                        <div class="payment-item__logo payment-item__logo--uandes">UA</div>
+                        <div class="payment-item__info">
+                            <p class="payment-item__name">Universidad de los Andes</p>
+                            <p class="payment-item__sub">Educación</p>
+                            <p class="payment-item__due">Vence el 20 de mayo</p>
+                        </div>
+                        <div class="payment-item__right">
+                            <p class="payment-item__amount">$ 3.250.000</p>
+                            <button class="payment-item__arrow" type="button">›</button>
+                        </div>
+                    </div>
+                    <div class="payment-item">
+                        <div class="payment-item__logo payment-item__logo--auto">🚗</div>
+                        <div class="payment-item__info">
+                            <p class="payment-item__name">Seguro de Auto</p>
+                            <p class="payment-item__sub">Seguros</p>
+                            <p class="payment-item__due">Vence el 25 de mayo</p>
+                        </div>
+                        <div class="payment-item__right">
+                            <p class="payment-item__amount">$ 210.300</p>
+                            <button class="payment-item__arrow" type="button">›</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SAVING BANNER -->
+            <section class="saving-banner">
+                <div class="saving-banner__text">
+                    <p class="saving-banner__title">Paga antes del 15 de mayo<br>y ahorra hasta</p>
+                    <p class="saving-banner__amount">$98.000</p>
+                    <p class="saving-banner__sub">en recargos.</p>
+                    <a class="saving-banner__action" href="#">Quiero ahorrar ›</a>
+                </div>
+                <div class="saving-banner__orb" aria-hidden="true">
+                    <span class="saving-banner__percent">%</span>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- FIXED BOTTOM NAV -->
+        <nav class="bottom-nav">
+            <div class="bottom-nav__item bottom-nav__item--active">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                <span class="nav-label">Pagar</span>
+            </div>
+            <div class="bottom-nav__item">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                <span class="nav-label">Historial</span>
             </div>
 
-            <!-- Bottom Right - Action Buttons -->
-            <div class="action-buttons" hidden>
-                <button class="profile-button" id="configToggle" onclick="window.toggleConfiguration ? window.toggleConfiguration() : toggleConfigurationPanel()">
-                    <span class="profile-label">⚙️ CONFIG</span>
-                    <div class="profile-icon">→</div>
-                </button>
+            <!-- Central orb = #startSession — DOM contract -->
+            <button id="startSession" class="join-button bottom-nav__orb"
+                    onclick="document.body.classList.contains('session-started') ? window.stopSession() : window.startSession()"
+                    type="button">
+                <div class="orb-inner">
+                    <span class="orb-icon orb-icon--join">
+                        <svg viewBox="0 0 48 28" fill="none" xmlns="http://www.w3.org/2000/svg" width="38" height="22">
+                            <ellipse cx="13" cy="12" rx="6" ry="6" fill="#0A5BFF" opacity="0.85"/>
+                            <ellipse cx="35" cy="12" rx="6" ry="6" fill="#0A5BFF" opacity="0.85"/>
+                            <path d="M7 18 Q24 30 41 18" stroke="#0A5BFF" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+                        </svg>
+                    </span>
+                    <span class="orb-icon orb-icon--stop">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="26" height="26">
+                            <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6A19.79 19.79 0 012.12 4.18 2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z" stroke="#FF3B30" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <line x1="2" y1="2" x2="22" y2="22" stroke="#FF3B30" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </span>
+                </div>
+            </button>
+
+            <div class="bottom-nav__item">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                <span class="nav-label">Servicios</span>
             </div>
-        </div>
+            <!-- "Más" = detener sesión activa -->
+            <div class="bottom-nav__item" id="leftMenuStopSession" onclick="window.stopSession()">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                <span class="nav-label">Más</span>
+            </div>
+        </nav>
     </div>
+
+    <!-- ===== HIDDEN ELEMENTS — DOM contracts preserved ===== -->
+    <nav class="left-menu" style="position:fixed;top:-9999px;left:-9999px;visibility:hidden;" aria-hidden="true">
+        <button id="togglePreviewMode" onclick="window.togglePreviewMode()" type="button">PREVIEW</button>
+        <button id="stopSpeaking" onclick="window.stopSpeaking()" type="button" disabled>INTERRUMPIR</button>
+        <button id="leftMenuClearChat" onclick="window.clearChatHistory()" type="button">LIMPIAR</button>
+        <button onclick="window.renombrar()" type="button">RENOMBRAR</button>
+        <button id="stopSession" type="button" hidden disabled aria-hidden="true" tabindex="-1"></button>
+    </nav>
+
+    <div class="action-buttons" hidden>
+        <button class="profile-button" id="configToggle" onclick="window.toggleConfiguration ? window.toggleConfiguration() : toggleConfigurationPanel()">
+            <span class="profile-label">⚙️ CONFIG</span>
+        </button>
+    </div>
+
+    <!-- sessionStatusLabel2 — referenciado en algunos flujos JS -->
+    <div id="sessionStatusLabel2" style="display:none;font-size:0.75rem;color:#a3a3a3;">Ready to chat</div>
 
     <!-- ===== CONFIGURATION PANEL ===== -->
     <div id="configuration">
@@ -205,10 +340,8 @@
                 <option value="harry">harry</option>
                 <option value="jeff">jeff</option>
                 <option value="jeff">Celine</option>
-
             </select>
         </div>
-
         <div class="config-field">
             <label for="talkingAvatarStyle">Avatar Style</label>
             <select id="talkingAvatarStyle">
@@ -220,7 +353,6 @@
                 <option value="technical-sitting">technical-sitting</option>
             </select>
         </div>
-
         <!-- HIDDEN FIELDS — Requeridos por chat.js -->
         <input id="region" type="text" hidden value="eastus2"/>
         <input id="APIKey" type="password" hidden value=""/>
@@ -265,7 +397,6 @@ IDIOMA: Siempre respondés en español, sin excepción. Si el usuario te escribe
                 document.getElementById('azureOpenAIDeploymentName').value = cfg.openAIDeployment;
             });
 
-        // Toggle configuration panel visibility
         function toggleConfigurationPanel() {
             const config = document.getElementById('configuration');
             config.style.display = config.style.display === 'block' ? 'none' : 'block';
@@ -273,7 +404,7 @@ IDIOMA: Siempre respondés en español, sin excepción. Si el usuario te escribe
         window.toggleConfiguration = toggleConfigurationPanel;
 
         window.addEventListener('pagehide', () => {
-            if (typeof disconnectAvatar === 'function') disconnectAvatar()
+            if (typeof disconnectAvatar === 'function') disconnectAvatar();
         });
 
         const avatarStylesByCharacter = {
@@ -287,14 +418,10 @@ IDIOMA: Siempre respondés en español, sin excepción. Si el usuario te escribe
         function syncAvatarStyles() {
             const avatarSelect = document.getElementById('talkingAvatarCharacter');
             const styleSelect = document.getElementById('talkingAvatarStyle');
-            if (!avatarSelect || !styleSelect) {
-                return;
-            }
-
+            if (!avatarSelect || !styleSelect) return;
             const selectedAvatar = avatarSelect.value;
             const allowedStyles = avatarStylesByCharacter[selectedAvatar] || [];
             const previousStyle = styleSelect.value;
-
             styleSelect.innerHTML = '';
             allowedStyles.forEach((style) => {
                 const option = document.createElement('option');
@@ -302,7 +429,6 @@ IDIOMA: Siempre respondés en español, sin excepción. Si el usuario te escribe
                 option.textContent = style;
                 styleSelect.appendChild(option);
             });
-
             if (allowedStyles.includes(previousStyle)) {
                 styleSelect.value = previousStyle;
             } else if (allowedStyles.length > 0) {
@@ -313,29 +439,18 @@ IDIOMA: Siempre respondés en español, sin excepción. Si el usuario te escribe
         window.syncAvatarStyles = syncAvatarStyles;
         window.syncAvatarStyles();
 
-        // Override togglePreviewMode to show the preview avatar image
         const originalActivatePreviewMode = window.activatePreviewMode;
         window.activatePreviewMode = function() {
-            if (originalActivatePreviewMode) {
-                originalActivatePreviewMode();
-            }
-            // Show the preview avatar image
+            if (originalActivatePreviewMode) originalActivatePreviewMode();
             const previewImg = document.getElementById('previewAvatarImage');
-            if (previewImg) {
-                previewImg.style.display = 'block';
-            }
+            if (previewImg) previewImg.style.display = 'block';
         };
 
         const originalDeactivatePreviewMode = window.deactivatePreviewMode;
         window.deactivatePreviewMode = function() {
-            if (originalDeactivatePreviewMode) {
-                originalDeactivatePreviewMode();
-            }
-            // Hide the preview avatar image
+            if (originalDeactivatePreviewMode) originalDeactivatePreviewMode();
             const previewImg = document.getElementById('previewAvatarImage');
-            if (previewImg) {
-                previewImg.style.display = 'none';
-            }
+            if (previewImg) previewImg.style.display = 'none';
         };
     </script>
 </body>
