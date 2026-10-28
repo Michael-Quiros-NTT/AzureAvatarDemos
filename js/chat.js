@@ -297,7 +297,6 @@ function setupWebRTC(iceServerUrl, iceServerUsername, iceServerCredential) {
         // Update status bar based on connection state
         if (peerConnection.iceConnectionState === 'connected') {
             updateStatusBar('connected')
-            document.getElementById('startSession').disabled = false
         } else if (peerConnection.iceConnectionState === 'failed' || peerConnection.iceConnectionState === 'disconnected') {
             updateStatusBar('disconnected')
             if (document.getElementById('useLocalVideoForIdle').checked) {
@@ -325,16 +324,12 @@ function setupWebRTC(iceServerUrl, iceServerUsername, iceServerCredential) {
 
                 console.log("Unable to start avatar: " + cancellationDetails.errorDetails);
             }
-            disconnectAvatar()
-            updateStatusBar('disconnected')
             document.getElementById('startSession').disabled = false;
             document.getElementById('configuration').hidden = false;
         }
     }).catch(
         (error) => {
             console.log("[" + (new Date()).toISOString() + "] Avatar failed to start. Error: " + error)
-            disconnectAvatar()
-            updateStatusBar('disconnected')
             document.getElementById('startSession').disabled = false
             document.getElementById('configuration').hidden = false
         }
@@ -710,8 +705,6 @@ function handleUserQuery(userQuery, userQueryHTML, imgUrlPath) {
         }
 
         messages.push(assistantMessage)
-
-        if (window.avalPayWidgets) window.avalPayWidgets.onAssistantReply(assistantReply)
     })
     .catch((error) => {
         activeAssistantBubble = null
@@ -1120,9 +1113,4 @@ function updateStatusBar(status) {
 
 // ===== EXPOSE FUNCTIONS GLOBALLY =====
 window.updateStatusBar = updateStatusBar;
-
-window.sendQuickMessage = (text) => {
-    if (!sessionActive) return
-    handleUserQuery(text, text, '')
-}
 // togglePreviewMode ya está expuesto arriba

@@ -25,18 +25,12 @@
 
     function confirm() {
         const nameInput = document.getElementById('spotlight-name')
-        const name = nameInput.value.trim() || 'Avatar'
+        const name = nameInput.value.trim() || 'Camila'
         const avatar = document.getElementById('spotlight-avatar').value
         const style = document.getElementById('spotlight-style').value
 
-        const joinLabel = document.querySelector('#startSession .join-label')
-        if (joinLabel) joinLabel.textContent = `Llamar a ${name}`
-
-        const brandLogo = document.querySelector('.brand-logo')
-        if (brandLogo) brandLogo.textContent = `${name} avatar`
-
-        const greeting = document.querySelector('.hero-greeting')
-        if (greeting) greeting.textContent = `Hola, ${name} 👋`
+        document.querySelector('#startSession .join-label').textContent = `Llamar a ${name}`
+        document.querySelector('.brand-logo').textContent = `${name} avatar`
 
         const promptEl = document.getElementById('prompt')
         promptEl.value = promptEl.value.replace(/\{NOMBRE\}/g, name)
@@ -77,7 +71,7 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-        confirm()
+        document.getElementById('spotlight-name').focus()
 
         document.getElementById('spotlight-avatar').addEventListener('change', syncSpotlightStyles)
 
