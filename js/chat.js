@@ -14,6 +14,11 @@ var enableDisplayTextAlignmentWithSpeech = true
 var enableQuickReply = false
 var quickReplies = [ 'Let me take a look.', 'Let me check.', 'One moment, please.' ]
 var byodDocRegex = new RegExp(/\[doc(\d+)\]/g)
+
+function hasIncompleteWidget(text) {
+    const start = text.indexOf('<!--WIDGET:')
+    return start !== -1 && !text.includes('-->', start)
+}
 var isSpeaking = false
 var isReconnecting = false
 var speakingText = ""
@@ -633,8 +638,10 @@ function handleUserQuery(userQuery, userQueryHTML, imgUrlPath) {
 
                                 if (responseToken === '\n' || responseToken === '\n\n') {
                                     spokenSentence += responseToken
-                                    speak(spokenSentence)
-                                    spokenSentence = ''
+                                    if (!hasIncompleteWidget(spokenSentence)) {
+                                        speak(spokenSentence)
+                                        spokenSentence = ''
+                                    }
                                 } else {
                                     spokenSentence += responseToken // build up the spoken sentence
 
@@ -643,8 +650,10 @@ function handleUserQuery(userQuery, userQueryHTML, imgUrlPath) {
                                         for (let i = 0; i < sentenceLevelPunctuations.length; ++i) {
                                             let sentenceLevelPunctuation = sentenceLevelPunctuations[i]
                                             if (responseToken.startsWith(sentenceLevelPunctuation)) {
-                                                speak(spokenSentence)
-                                                spokenSentence = ''
+                                                if (!hasIncompleteWidget(spokenSentence)) {
+                                                    speak(spokenSentence)
+                                                    spokenSentence = ''
+                                                }
                                                 break
                                             }
                                         }
