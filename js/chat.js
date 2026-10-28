@@ -419,6 +419,17 @@ function speak(text, endingSilenceMs = 0) {
 }
 
 function speakNext(text, endingSilenceMs = 0, skipUpdatingChatHistory = false) {
+    text = text.replace(/<!--WIDGET:[\s\S]*?-->/, '').trim()
+    if (!text) {
+        speakingText = ''
+        if (spokenTextQueue.length > 0) {
+            speakNext(spokenTextQueue.shift())
+        } else {
+            isSpeaking = false
+            document.getElementById('stopSpeaking').disabled = true
+        }
+        return
+    }
     let ttsVoice = document.getElementById('ttsVoice').value
      let ssml = `<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xmlns:mstts='http://www.w3.org/2001/mstts' xml:lang='en-US'><voice name='${ttsVoice}'><mstts:leadingsilence-exact value='0'/>${htmlEncode(text)}</voice></speak>`
     if (endingSilenceMs > 0) {
@@ -665,6 +676,16 @@ function handleUserQuery(userQuery, userQueryHTML, imgUrlPath) {
         if (spokenSentence !== '') {
             speak(spokenSentence)
             spokenSentence = ''
+        }
+
+        if (window.parseWidget) {
+            const widgetData = window.parseWidget(assistantReply)
+            if (widgetData) {
+                if (activeAssistantBubble) {
+                    activeAssistantBubble.innerHTML = window.stripWidgetBlock(activeAssistantBubble.innerHTML)
+                }
+                window.renderWidget(widgetData)
+            }
         }
 
         activeAssistantBubble = null

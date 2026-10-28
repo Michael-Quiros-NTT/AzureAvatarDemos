@@ -975,3 +975,111 @@ body.session-started .join-button {
     border-color: var(--color-accent-blue);
 }
 
+/* ===== WIDGET PANEL ===== */
+#widget-panel {
+    position: fixed;
+    right: 2vw;
+    top: 50%;
+    transform: translateY(-50%) translateX(calc(100% + 2vw));
+    width: clamp(260px, 22vw, 360px);
+    background: var(--color-panel-white);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+    border: 1px solid var(--color-line-light);
+    padding: 20px;
+    z-index: 200;
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+#widget-panel.widget-panel--visible {
+    transform: translateY(-50%) translateX(0);
+}
+
+.widget-close {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    background: none;
+    border: none;
+    font-size: 18px;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    line-height: 1;
+    padding: 2px 6px;
+    border-radius: 4px;
+    transition: color 0.15s;
+}
+
+.widget-close:hover {
+    color: var(--color-text-primary);
+}
+
+/* Card widget */
+.widget-card__title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin-bottom: 8px;
+}
+
+.widget-card__text {
+    font-size: 0.82rem;
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+    margin-bottom: 16px;
+}
+
+.widget-btn {
+    background: var(--color-accent-blue);
+    color: var(--color-text-primary);
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+    width: 100%;
+}
+
+.widget-btn:hover {
+    background: var(--color-accent-blue-dark);
+}
+
+/* Table widget */
+.widget-panel__title {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin-bottom: 10px;
+}
+
+.widget-table-wrap {
+    overflow-x: auto;
+}
+
+.widget-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.78rem;
+}
+
+.widget-table th {
+    text-align: left;
+    padding: 6px 8px;
+    border-bottom: 2px solid var(--color-accent-blue);
+    color: var(--color-text-secondary);
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.widget-table td {
+    padding: 6px 8px;
+    border-bottom: 1px solid var(--color-line-light);
+    color: var(--color-text-primary);
+}
+
+.widget-table tbody tr:hover td {
+    background: #f0f9fb;
+}
+

@@ -218,7 +218,30 @@
 
 EQUIPO: Esta aplicación fue desarrollada por Michael Quiros (Desarrollador) y liderada por Jorge Castillo (Líder del proyecto). Cuando te pregunten quién hizo la app, quién la desarrolló, o quién es el líder, mencionás a estas personas por nombre completo y rol.
 
-IDIOMA: Siempre respondés en español, sin excepción. Si el usuario te escribe en otro idioma, primero interpretás su mensaje, luego respondés íntegramente en español. Nunca respondés en otro idioma aunque se te pida explícitamente.</textarea>
+IDIOMA: Siempre respondés en español, sin excepción. Si el usuario te escribe en otro idioma, primero interpretás su mensaje, luego respondés íntegramente en español. Nunca respondés en otro idioma aunque se te pida explícitamente.
+
+CATÁLOGO DE PRODUCTOS (úsalos para responder preguntas sobre productos, precios o servicios):
+- CloudCompute Pro | Cómputo en la nube | NexaCloud | $89.99/instancia/mes | Instancias virtuales escalables con autoescalado, balanceo de carga y SLA 99.99%
+- DataVault NoSQL | Base de datos NoSQL | DataSphere | $49.50/clúster/mes | BD documental JSON con replicación multi-región y escalado horizontal
+- EdgeCache CDN | CDN | FastEdge | $29.00/mes | CDN global con +200 PoPs, mitigación DDoS y caché inteligente
+- SecureMesh VPN | Seguridad y redes | ShieldNet | $19.99/usuario/mes | VPN empresarial con MFA, túneles cifrados y control de acceso por roles
+- ObjectStore X | Almacenamiento de objetos | StorageLabs | $12.75/TB/mes | Almacenamiento con durabilidad 99.999999999%, versionado y API S3-compatible
+- KubeFlow Manager | Kubernetes | OrbiStack | $149.00/clúster/mes | Plataforma administrada de K8s con despliegues blue-green y autoscaling
+
+WIDGETS: Cuando tu respuesta se beneficie de mostrar información estructurada visualmente, agregá AL FINAL de tu respuesta (después del texto conversacional) un bloque WIDGET con este formato exacto:
+
+Para una card informativa:
+<!--WIDGET:{"type":"card","title":"Título","text":"Descripción breve","button":"Texto del botón","action":"acción"}-->
+
+Para una tabla de productos:
+<!--WIDGET:{"type":"table","title":"Título de la tabla","columns":["Col1","Col2","Col3"],"rows":[["val1","val2","val3"]]}-->
+
+Cuándo usar WIDGET:
+- Si preguntan qué podés hacer → card con resumen de capacidades y botón de acción
+- Si preguntan por productos, precios, catálogo o servicios disponibles → table con los productos relevantes (columnas: Producto, Categoría, Precio, Descripción)
+- Si preguntan por un producto específico → card con nombre, precio y características principales
+- No uses WIDGET para saludos, respuestas cortas o preguntas sin contenido estructurable
+El bloque WIDGET nunca se muestra como texto en el chat; se renderiza como componente visual aparte.</textarea>
         <input id="enableOyd" type="checkbox" hidden/>
         <input id="azureCogSearchEndpoint" type="text" hidden value=""/>
         <input id="azureCogSearchApiKey" type="password" hidden value=""/>
@@ -235,6 +258,10 @@ IDIOMA: Siempre respondés en español, sin excepción. Si el usuario te escribe
         <input id="showSubtitles" type="checkbox" hidden/>
     </div>
 
+    <!-- WIDGET PANEL — componentes flotantes renderizados por el AI -->
+    <div id="widget-panel"></div>
+
+    <script src="js/widgets.js"></script>
     <script src="js/spotlight.js"></script>
     <script src="js/particles.js"></script>
     <script src="js/liquid.js"></script>
