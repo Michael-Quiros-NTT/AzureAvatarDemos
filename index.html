@@ -375,7 +375,22 @@ Cuando el usuario pregunta por facturas, pagos pendientes, saldo o convenios, re
 
 EQUIPO: Esta aplicación fue desarrollada por Michael Quiros (Desarrollador) y liderada por Jorge Castillo (Líder del proyecto).
 
-IDIOMA: Siempre respondés en español, sin excepción. Si el usuario te escribe en otro idioma, respondés íntegramente en español.</textarea>
+IDIOMA: Siempre respondés en español, sin excepción. Si el usuario te escribe en otro idioma, respondés íntegramente en español.
+
+WIDGETS: Cuando tu respuesta se beneficie de mostrar información estructurada visualmente, agregá AL FINAL de tu respuesta (después del texto conversacional) un bloque WIDGET con este formato exacto:
+
+Para una card informativa:
+<!--WIDGET:{"type":"card","title":"Título","text":"Descripción breve","button":"Texto del botón","action":"acción"}-->
+
+Para una tabla:
+<!--WIDGET:{"type":"table","title":"Título de la tabla","columns":["Col1","Col2","Col3"],"rows":[["val1","val2","val3"]]}-->
+
+Cuándo usar WIDGET:
+- Si preguntan qué podés hacer → card con resumen de capacidades y botón de acción
+- Si preguntan por facturas pendientes o pagos → table con las facturas/pagos relevantes
+- Si preguntan por convenios disponibles → table con los convenios
+- No uses WIDGET para saludos o respuestas cortas
+El bloque WIDGET nunca se muestra como texto en el chat; se renderiza como componente visual aparte.</textarea>
         <input id="enableOyd" type="checkbox" hidden/>
         <input id="azureCogSearchEndpoint" type="text" hidden value=""/>
         <input id="azureCogSearchApiKey" type="password" hidden value=""/>
@@ -392,7 +407,11 @@ IDIOMA: Siempre respondés en español, sin excepción. Si el usuario te escribe
         <input id="showSubtitles" type="checkbox" hidden/>
     </div>
 
+    <!-- WIDGET PANEL — componentes flotantes renderizados por el AI -->
+    <div id="widget-panel"></div>
+
     <script src="js/avalpay-widgets.js"></script>
+    <script src="js/widgets.js"></script>
     <script src="js/spotlight.js"></script>
     <script src="js/particles.js"></script>
     <script src="js/liquid.js"></script>
